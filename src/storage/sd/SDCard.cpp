@@ -1,5 +1,10 @@
 #include <atlas/storage/sd/SDCard.hpp>
 
+namespace
+{
+    constexpr std::uint8_t DataToken = 0xFE;
+}
+
 namespace atlas::storage::sd
 {
 
@@ -160,6 +165,77 @@ bool SDCard::ReadBlock(
     // CRC
     m_spi.Transfer(0xFF);
     m_spi.Transfer(0xFF);
+
+    m_spi.Deselect();
+
+    return true;
+}
+
+bool SDCard::WriteBlock(
+    std::uint32_t block,
+    const std::uint8_t* buffer)
+{
+    if (!m_highCapacity)
+    {
+        block <<= 9;
+    }
+
+    if (!m_spi.WaitReady())
+    {
+        return false;
+    }
+
+    m_spi.Select();
+
+    m_spi.Transfer(
+        0x40 | static_cast<std::uint8_t>(Command::Cmd24));
+
+    m_spi.Transfer(static_cast<std::uint8_t>(block >> 24));
+    m_spi.Transfer(static_cast<std::uint8_t>(block >> 16));
+    m_spi.Transfer(static_cast<std::uint8_t>(block >> 8));
+    m_spi.Transfer(static_cast<std::uint8_t>(block));
+
+    m_spi.Transfer(0xFF);
+
+    std::uint8_t response;
+
+    if (!WaitResponse(response))
+    {
+        m_spi.Deselect();
+        return false;
+    }
+
+    if (response != 0x00)
+    {
+        m_spi.Deselect();
+        return false;
+    }
+
+    m_spi.Transfer(DataToken);
+
+    for (std::size_t i = 0; i < 512; ++i)
+    {
+        m_spi.Transfer(buffer[i]);
+    }
+
+    // Dummy CRC
+    m_spi.Transfer(0xFF);
+    m_spi.Transfer(0xFF);
+
+    const std::uint8_t dataResponse =
+        m_spi.Transfer(0xFF);
+
+    if ((dataResponse & 0x1F) != 0x05)
+    {
+        m_spi.Deselect();
+        return false;
+    }
+
+    if (!m_spi.WaitReady())
+    {
+        m_spi.Deselect();
+        return false;
+    }
 
     m_spi.Deselect();
 

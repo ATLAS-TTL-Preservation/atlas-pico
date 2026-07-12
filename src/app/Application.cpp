@@ -33,19 +33,19 @@ void Application::Initialize()
     {
         m_display.DrawText(5,5,"MOUNT FAIL");
     }
-    if (m_storage.Exists("/config.ptpe"))
+    if (m_storage.Exists("/KAOS"))
     {
-        m_display.DrawText(5, 15, "FILE EXISTS");
+        m_display.DrawText(5, 15, "FOLDER EXISTS");
     }
     else{
-        m_display.DrawText(5, 15, "DOESNT EXISTS");
-    }
-    if (m_storage.Exists("/config2.ptpe"))
-    {
-        m_display.DrawText(5, 25, "FILE EXISTS");
-    }
-    else{
-        m_display.DrawText(5, 25, "DOESNT EXISTS");
+        m_display.DrawText(5, 15, "CREATING FOLDER");
+        if(m_storage.CreateDirectory("KAOS")){
+             m_display.DrawText(5, 25, "CREATED FOLDER");
+        }
+        else{
+             m_display.DrawText(5, 25, "FAILD TO CREATE");
+        }
+
     }
     
 

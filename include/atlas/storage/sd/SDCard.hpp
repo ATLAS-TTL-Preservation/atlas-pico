@@ -22,6 +22,10 @@ public:
         std::uint32_t block,
         std::uint8_t* buffer);
 
+    bool WriteBlock(
+        std::uint32_t block,
+        const std::uint8_t* buffer);
+
     ReadResult GetLastReadResult() const;
 
     std::uint8_t GetLastResponse() const;

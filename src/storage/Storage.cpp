@@ -33,9 +33,11 @@ bool Storage::Exists(const std::string& path) const
         &info) == FR_OK;
 }
 
-bool Storage::CreateDirectory(const std::string&)
+bool Storage::CreateDirectory(
+    const std::string& path)
 {
-    return false;
+    return
+        f_mkdir(path.c_str()) == FR_OK;
 }
 
 bool Storage::Delete(const std::string&)

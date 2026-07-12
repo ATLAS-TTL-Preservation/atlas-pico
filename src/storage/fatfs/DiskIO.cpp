@@ -67,11 +67,26 @@ DRESULT disk_read(
 
 DRESULT disk_write(
     BYTE,
-    const BYTE*,
-    LBA_t,
-    UINT)
+    const BYTE* buffer,
+    LBA_t sector,
+    UINT count)
 {
-    return RES_WRPRT;
+    if (g_sd == nullptr)
+    {
+        return RES_NOTRDY;
+    }
+
+    for (UINT i = 0; i < count; ++i)
+    {
+        if (!g_sd->WriteBlock(
+                sector + i,
+                buffer + (i * 512)))
+        {
+            return RES_ERROR;
+        }
+    }
+
+    return RES_OK;
 }
 
 DRESULT disk_ioctl(

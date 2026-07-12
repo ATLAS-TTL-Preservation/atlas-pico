@@ -1,8 +1,10 @@
 #include <atlas/app/Application.hpp>
 #include <atlas/system/System.hpp>
+#include <atlas/hardware/LedPattern.hpp>
 
 using namespace std::chrono_literals;
 using atlas::system::System;
+using atlas::hardware::LedPattern;
 
 namespace atlas::app
 {
@@ -26,12 +28,7 @@ void Application::Initialize()
 
 void Application::Loop()
 {
-    if (m_buttons.IsPressed(atlas::gpio::Button::Select))
-    {
-        m_led.Toggle();
-
-        System::Delay(100ms);
-    }
+     m_led.Update(); 
 }
 
 }

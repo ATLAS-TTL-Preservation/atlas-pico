@@ -22,6 +22,11 @@ void ST7735Display::Init()
 
     InitializeController();
     SetRotation(Rotation::Landscape);
+
+    Clear();
+    WriteCommand(Command::DisplayOn);
+
+    sleep_ms(100);
 }
 
 void ST7735Display::InitializeSpi()
@@ -76,10 +81,6 @@ void ST7735Display::InitializeController()
 
     WriteCommand(Command::MemoryAccessControl);
     WriteData(0xC8);
-
-    WriteCommand(Command::DisplayOn);
-
-    sleep_ms(100);
 }
 
 void ST7735Display::SetRotation(Rotation rotation)

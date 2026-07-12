@@ -55,16 +55,34 @@ void ST7735Display::Reset()
     sleep_ms(150);
 }
 
-void ST7735Display::WriteCommand(std::uint8_t)
+void ST7735Display::WriteCommand(std::uint8_t command)
 {
+    gpio_put(atlas::hardware::Pinout::Display::Dc, false);
+    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+
+    spi_write_blocking(spi1, &command, 1);
+
+    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
 }
 
-void ST7735Display::WriteData(std::uint8_t)
+void ST7735Display::WriteData(std::uint8_t data)
 {
+    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
+    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+
+    spi_write_blocking(spi1, &data, 1);
+
+    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
 }
 
-void ST7735Display::WriteData(const std::uint8_t*, std::size_t)
+void ST7735Display::WriteData(const std::uint8_t* data, std::size_t length)
 {
+    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
+    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+
+    spi_write_blocking(spi1, data, length);
+
+    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
 }
 
 void ST7735Display::Clear()

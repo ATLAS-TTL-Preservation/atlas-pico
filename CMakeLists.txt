@@ -14,6 +14,7 @@ pico_sdk_init()
 add_executable(atlas-pico
     src/main.cpp
     src/app/Application.cpp
+    src/gpio/Led.cpp
 )
 
 target_include_directories(atlas-pico

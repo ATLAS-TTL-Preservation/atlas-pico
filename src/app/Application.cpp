@@ -1,5 +1,7 @@
 #include <atlas/app/Application.hpp>
 
+#include <pico/stdlib.h>
+
 namespace atlas::app
 {
 
@@ -15,12 +17,14 @@ void Application::Run()
 
 void Application::Initialize()
 {
-    // Initialize application components.
+    m_led.Init();
 }
 
 void Application::Loop()
 {
-    // Main application loop.
+    m_led.Toggle();
+
+    sleep_ms(500);
 }
 
 }

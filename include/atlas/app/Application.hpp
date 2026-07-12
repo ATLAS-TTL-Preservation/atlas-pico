@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atlas/gpio/Led.hpp>
+
 namespace atlas::app
 {
 
@@ -11,6 +13,9 @@ public:
 private:
     void Initialize();
     void Loop();
+
+private:
+    atlas::gpio::Led m_led;
 };
 
-} // namespace atlas::app
+}

@@ -46,16 +46,18 @@ bool SDCard::SendCommand(
     Command command,
     std::uint32_t argument,
     std::uint8_t crc,
-    std::uint8_t& response)
+    std::uint8_t& response,
+    std::uint8_t* data,
+    std::size_t length)
 {
     Select();
 
     Transfer(0x40 | static_cast<std::uint8_t>(command));
 
-    Transfer(argument >> 24);
-    Transfer(argument >> 16);
-    Transfer(argument >> 8);
-    Transfer(argument);
+    Transfer(static_cast<std::uint8_t>(argument >> 24));
+    Transfer(static_cast<std::uint8_t>(argument >> 16));
+    Transfer(static_cast<std::uint8_t>(argument >> 8));
+    Transfer(static_cast<std::uint8_t>(argument));
 
     Transfer(crc);
 
@@ -65,13 +67,17 @@ bool SDCard::SendCommand(
 
         if ((response & 0x80) == 0)
         {
+            for (std::size_t j = 0; j < length; ++j)
+            {
+                data[j] = Transfer(DummyByte);
+            }
+
             Deselect();
             return true;
         }
     }
 
     Deselect();
-
     return false;
 }
 
@@ -122,6 +128,75 @@ bool SDCard::Initialize()
     {
         return false;
     }
+
+    std::uint8_t cmd8Response[4];
+
+    if (!SendCommand(
+            Command::Cmd8,
+            0x000001AA,
+            0x87,
+            response,
+            cmd8Response,
+            4))
+    {
+        return false;
+    }
+
+    if (response != 0x01)
+    {
+        return false;
+    }
+
+    if (cmd8Response[2] != 0x01 || cmd8Response[3] != 0xAA)
+    {
+        return false;
+    }
+
+    while (true)
+    {
+        if (!SendCommand(
+                Command::Cmd55,
+                0x00000000,
+                0x01,
+                response))
+        {
+            return false;
+        }
+
+        if (!SendCommand(
+                Command::Acmd41,
+                0x40000000,
+                0x01,
+                response))
+        {
+            return false;
+        }
+
+        if (response == 0x00)
+        {
+            break;
+        }
+    }
+
+    std::uint8_t ocr[4];
+
+    if (!SendCommand(
+            Command::Cmd58,
+            0x00000000,
+            0x01,
+            response,
+            ocr,
+            4))
+    {
+        return false;
+    }
+
+    if (response != 0x00)
+    {
+        return false;
+    }
+
+    spi_set_baudrate(spi0, 25'000'000);
 
     return true;
 }

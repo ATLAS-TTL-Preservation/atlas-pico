@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 #include <atlas/storage/sd/Command.hpp>
 #include <atlas/storage/sd/Response.hpp>
@@ -18,10 +19,12 @@ public:
 private:
 
     bool SendCommand(
-        Command command,
-        std::uint32_t argument,
-        std::uint8_t crc,
-        std::uint8_t& response);
+    Command command,
+    std::uint32_t argument,
+    std::uint8_t crc,
+    std::uint8_t& response,
+    std::uint8_t* data = nullptr,
+    std::size_t length = 0);
 
     void Select();
 

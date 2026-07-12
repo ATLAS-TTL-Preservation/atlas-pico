@@ -29,6 +29,9 @@ void Application::Initialize()
     {
         m_led.SetPattern(LedPattern::Error);
     }
+    else{
+        m_display.DrawText(0,0,"Welcome to ATLAS!");
+    }
 
 }
 

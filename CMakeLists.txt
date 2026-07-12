@@ -27,6 +27,7 @@ add_executable(atlas-pico
     third_party/fatfs/ff.c
     third_party/fatfs/ffsystem.c
     third_party/fatfs/ffunicode.c
+    src/menu/MenuManager.cpp
 )
 
 target_include_directories(atlas-pico

@@ -1,5 +1,5 @@
 #pragma once
-
+#include <atlas/hardware/Pinout.hpp>
 namespace atlas::gpio
 {
 
@@ -17,7 +17,7 @@ public:
     void Toggle();
 
 private:
-    static constexpr unsigned int LedPin = 25;
+    static constexpr unsigned int LedPin = atlas::hardware::Pinout::Led::Pin;
 };
 
 } // namespace atlas::gpio

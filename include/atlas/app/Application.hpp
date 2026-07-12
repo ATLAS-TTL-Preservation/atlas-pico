@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atlas/gpio/Led.hpp>
+#include <atlas/gpio/ButtonManager.hpp>
 
 namespace atlas::app
 {
@@ -16,6 +17,7 @@ private:
 
 private:
     atlas::gpio::Led m_led;
+    atlas::gpio::ButtonManager m_buttons;
 };
 
 }

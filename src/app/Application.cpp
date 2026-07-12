@@ -18,13 +18,17 @@ void Application::Run()
 void Application::Initialize()
 {
     m_led.Init();
+    m_buttons.Init();
 }
 
 void Application::Loop()
 {
-    m_led.Toggle();
+    if (m_buttons.IsPressed(atlas::gpio::Button::Select))
+    {
+        m_led.Toggle();
 
-    sleep_ms(500);
+        sleep_ms(150);
+    }
 }
 
 }

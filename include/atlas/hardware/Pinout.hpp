@@ -18,6 +18,15 @@ struct Pinout
         static constexpr unsigned int Right   = 19;
         static constexpr unsigned int Action2 = 20;
     };
+    struct Display
+    {
+        static constexpr unsigned int Sck  = 14;
+        static constexpr unsigned int Mosi = 15;
+
+        static constexpr unsigned int Cs   = 9;
+        static constexpr unsigned int Dc   = 10;
+        static constexpr unsigned int Rst  = 11;
+    };
 };
 
 } // namespace atlas::hardware

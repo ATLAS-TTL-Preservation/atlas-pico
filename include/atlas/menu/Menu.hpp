@@ -2,6 +2,11 @@
 
 #include <atlas/display/Display.hpp>
 
+namespace atlas::input
+{
+struct Input;
+}
+
 namespace atlas::menu
 {
 
@@ -30,6 +35,26 @@ public:
 
     virtual void Draw(
         atlas::display::Display& display) = 0;
+
+    virtual void OnLeft()
+    {
+    }
+
+    virtual void OnRight()
+    {
+    }
+
+    virtual void OnSelect()
+    {
+    }
+
+    virtual void OnAction1()
+    {
+    }
+
+    virtual void OnAction2()
+    {
+    }
 
     bool NeedsRedraw() const
     {

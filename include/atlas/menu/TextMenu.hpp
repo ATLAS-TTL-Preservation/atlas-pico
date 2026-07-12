@@ -34,6 +34,10 @@ public:
     void Draw(
         atlas::display::Display& display) override;
 
+    void OnLeft() override;
+
+    void OnRight() override;
+
 protected:
     virtual std::string_view Footer() const
     {

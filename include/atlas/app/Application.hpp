@@ -6,6 +6,7 @@
 #include <atlas/storage/Storage.hpp>
 #include <atlas/menu/MainMenu.hpp>
 #include <atlas/menu/MenuManager.hpp>
+#include <atlas/input/InputManager.hpp>
 
 namespace atlas::app
 {
@@ -27,6 +28,7 @@ private:
     atlas::menu::MenuManager m_menuManager;
 
     atlas::menu::MainMenu m_mainMenu;
+    atlas::input::InputManager m_input;
 };
 
 }

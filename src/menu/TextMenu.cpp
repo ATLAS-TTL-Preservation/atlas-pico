@@ -108,5 +108,13 @@ void TextMenu::Draw(
         FooterY,
         Footer().data());
 }
+void TextMenu::OnLeft()
+{
+    MoveUp();
+}
 
+void TextMenu::OnRight()
+{
+    MoveDown();
+}
 }

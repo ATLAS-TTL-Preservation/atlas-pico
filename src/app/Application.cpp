@@ -41,8 +41,9 @@ void Application::Initialize()
 }
 
 void Application::Loop()
-{
-    m_menuManager.Update();
+{   
+    m_input.Update(m_buttons);
+    m_menuManager.Update(m_input.GetInput());
 
     m_menuManager.Draw(m_display);
     m_led.Update(); 

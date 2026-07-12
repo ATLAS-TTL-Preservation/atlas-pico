@@ -30,6 +30,7 @@ add_executable(atlas-pico
     src/menu/MenuManager.cpp
     src/menu/TextMenu.cpp
     src/menu/MainMenu.cpp
+    src/input/InputManager.cpp
 )
 
 target_include_directories(atlas-pico

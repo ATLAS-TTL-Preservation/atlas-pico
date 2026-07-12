@@ -2,6 +2,8 @@
 
 #include <atlas/display/st7735/Commands.hpp>
 
+#include <atlas/graphics/fonts/IBMVGA.hpp>
+
 #include <atlas/hardware/Pinout.hpp>
 
 #include <hardware/gpio.h>
@@ -19,6 +21,7 @@ void ST7735Display::Init()
     Reset();
 
     InitializeController();
+    SetRotation(Rotation::Landscape);
 }
 
 void ST7735Display::InitializeSpi()
@@ -79,6 +82,40 @@ void ST7735Display::InitializeController()
     sleep_ms(100);
 }
 
+void ST7735Display::SetRotation(Rotation rotation)
+{
+    m_rotation = rotation;
+
+    WriteCommand(Command::MemoryAccessControl);
+
+    switch (rotation)
+    {
+        case Rotation::Portrait:
+            WriteData(0x00);
+            m_width = 128;
+            m_height = 160;
+            break;
+
+        case Rotation::Landscape:
+            WriteData(0x60);
+            m_width = 160;
+            m_height = 128;
+            break;
+
+        case Rotation::PortraitFlipped:
+            WriteData(0xC0);
+            m_width = 128;
+            m_height = 160;
+            break;
+
+        case Rotation::LandscapeFlipped:
+            WriteData(0xA0);
+            m_width = 160;
+            m_height = 128;
+            break;
+    }
+}
+
 void ST7735Display::WriteCommand(Command command)
 {
     gpio_put(atlas::hardware::Pinout::Display::Dc, false);
@@ -108,6 +145,46 @@ void ST7735Display::WriteData(const std::uint8_t* data, std::size_t length)
     spi_write_blocking(spi1, data, length);
 
     gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+}
+
+void ST7735Display::DrawCharacter(
+    std::uint16_t x,
+    std::uint16_t y,
+    char character)
+{
+    static atlas::graphics::fonts::IBMVGA font;
+
+    const auto& glyph = font.GetGlyph(character);
+
+    if (glyph.bitmap == nullptr)
+    {
+        return;
+    }
+
+    const std::uint8_t* bitmap = glyph.bitmap + glyph.offset;
+
+    std::uint8_t bit = 0;
+    std::uint8_t bits = 0;
+
+    for (std::uint8_t yy = 0; yy < glyph.height; yy++)
+    {
+        for (std::uint8_t xx = 0; xx < glyph.width; xx++)
+        {
+            if ((bit++ & 7) == 0)
+            {
+                bits = *bitmap++;
+            }
+
+            if (bits & 0x80)
+            {
+                DrawPixel(
+                    x + glyph.xOffset + xx,
+                    y + glyph.yOffset + yy);
+            }
+
+            bits <<= 1;
+        }
+    }
 }
 
 void ST7735Display::SetAddressWindow(
@@ -140,8 +217,8 @@ void ST7735Display::Clear()
     SetAddressWindow(
         0,
         0,
-        Width - 1,
-        Height - 1);
+        m_width - 1,
+        m_height - 1);
 
     constexpr std::uint8_t pixel[] =
     {
@@ -149,7 +226,7 @@ void ST7735Display::Clear()
         0x00
     };
 
-    for (std::uint32_t i = 0; i < Width * Height; ++i)
+    for (std::uint32_t i = 0; i < m_width * m_height; ++i)
     {
         WriteData(pixel, sizeof(pixel));
     }
@@ -217,20 +294,28 @@ void ST7735Display::DrawVerticalLine(
 }
 
 void ST7735Display::DrawText(
-    std::uint16_t,
-    std::uint16_t,
-    std::string_view)
+    std::uint16_t x,
+    std::uint16_t y,
+    std::string_view text)
 {
+    static atlas::graphics::fonts::IBMVGA font;
+
+    for (char c : text)
+    {
+        DrawCharacter(x, y, c);
+
+        x += font.GetGlyph(c).advance;
+    }
 }
 
 std::uint16_t ST7735Display::GetWidth() const
 {
-    return Width;
+    return m_width;
 }
 
 std::uint16_t ST7735Display::GetHeight() const
 {
-    return Height;
+    return m_height;
 }
 
 } // namespace atlas::display::st7735

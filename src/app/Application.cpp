@@ -21,7 +21,18 @@ void Application::Initialize()
     m_buttons.Init();
     m_display.Init();
     m_display.Clear();
-
+    m_display.DrawText(
+        0,
+        0,
+        "Hello World!");
+    m_display.DrawText(
+        0,
+        9,
+        "ATLAS Custom Driver");
+    m_display.DrawText(
+        0,
+        18,
+        "for the ST7735 Display");
     // Basic Smiley for testing
     // eyes
     m_display.DrawPixel(45, 45);

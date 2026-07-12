@@ -17,6 +17,8 @@ add_executable(atlas-pico
     src/gpio/Led.cpp
     src/gpio/ButtonManager.cpp
     src/display/ST7735/ST7735Display.cpp
+    src/graphics/Font.cpp
+    src/graphics/fonts/IBMVGA.cpp
 )
 
 target_include_directories(atlas-pico

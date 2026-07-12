@@ -2,6 +2,7 @@
 
 #include <atlas/display/Display.hpp>
 #include <atlas/display/st7735/Commands.hpp>
+#include <atlas/display/st7735/Rotation.hpp>
 
 #include <cstddef>
 #include <cstdint>
@@ -58,6 +59,11 @@ private:
 
     void WriteData(const std::uint8_t* data, std::size_t length);
 
+    void DrawCharacter(
+    std::uint16_t x,
+    std::uint16_t y,
+    char character);
+
     void SetAddressWindow(
     std::uint16_t x0,
     std::uint16_t y0,
@@ -65,11 +71,13 @@ private:
     std::uint16_t y1);
 
     void InitializeController();
+    
+    void SetRotation(Rotation rotation);
 
-private:
-    // TODO: Width/Height will be updated when rotation support is implemented.
-    static constexpr std::uint16_t Width = 128;
-    static constexpr std::uint16_t Height = 160;
+    Rotation m_rotation = Rotation::Portrait;
+    
+    std::uint16_t m_width = 128;
+    std::uint16_t m_height = 160;
 };
 
 } // namespace atlas::display::st7735

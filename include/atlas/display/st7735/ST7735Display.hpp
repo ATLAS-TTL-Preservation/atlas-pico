@@ -1,15 +1,16 @@
 #pragma once
 
 #include <atlas/display/Display.hpp>
+#include <atlas/display/st7735/Commands.hpp>
 
 #include <cstddef>
 #include <cstdint>
 #include <string_view>
 
-namespace atlas::display
+namespace atlas::display::st7735
 {
 
-class ST7735Display final : public Display
+class ST7735Display final : public atlas::display::Display
 {
 public:
     ST7735Display() = default;
@@ -42,13 +43,23 @@ private:
 
     void Reset();
 
-    void WriteCommand(std::uint8_t command);
+    void WriteCommand(Command command);
+
     void WriteData(std::uint8_t data);
+
     void WriteData(const std::uint8_t* data, std::size_t length);
 
+    void SetAddressWindow(
+    std::uint16_t x0,
+    std::uint16_t y0,
+    std::uint16_t x1,
+    std::uint16_t y1);
+
+    void InitializeController();
+
 private:
-    static constexpr std::uint16_t Width = 160;
-    static constexpr std::uint16_t Height = 128;
+    static constexpr std::uint16_t Width = 128;
+    static constexpr std::uint16_t Height = 160;
 };
 
-} // namespace atlas::display
+} // namespace atlas::display::st7735

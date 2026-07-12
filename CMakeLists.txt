@@ -16,7 +16,7 @@ add_executable(atlas-pico
     src/app/Application.cpp
     src/gpio/Led.cpp
     src/gpio/ButtonManager.cpp
-    src/display/ST7735Display.cpp
+    src/display/ST7735/ST7735Display.cpp
 )
 
 target_include_directories(atlas-pico

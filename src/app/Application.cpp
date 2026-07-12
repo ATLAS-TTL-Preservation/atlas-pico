@@ -19,6 +19,8 @@ void Application::Initialize()
 {
     m_led.Init();
     m_buttons.Init();
+    m_display.Init();
+    m_display.Clear();
 }
 
 void Application::Loop()

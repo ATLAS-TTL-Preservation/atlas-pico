@@ -1,204 +1,272 @@
 #include <atlas/storage/sd/SDCard.hpp>
 
-#include <atlas/hardware/Pinout.hpp>
-
-#include <hardware/gpio.h>
-#include <hardware/spi.h>
-
-namespace
-{
-    constexpr std::uint32_t SpiBaudrate = 400'000;
-    constexpr std::uint8_t DummyByte = 0xFF;
-}
-
 namespace atlas::storage::sd
 {
 
 SDCard::SDCard() = default;
 
-void SDCard::Select()
+bool SDCard::Initialize()
 {
-    gpio_put(
-        atlas::hardware::Pinout::SD::ChipSelect,
-        false);
+    m_spi.Initialize();
+    m_spi.SetLowSpeed();
+
+    std::uint8_t response[4];
+
+    // CMD0
+    if (!SendCommand(
+            Command::Cmd0,
+            0,
+            0x95,
+            Response::Idle))
+    {
+        return false;
+    }
+
+    // CMD8
+    if (!SendCommand(
+            Command::Cmd8,
+            0x000001AA,
+            0x87,
+            Response::Idle,
+            response,
+            4))
+    {
+        return false;
+    }
+
+    if (response[2] != 0x01 ||
+        response[3] != 0xAA)
+    {
+        return false;
+    }
+
+    // ACMD41
+    while (true)
+    {
+        if (!SendCommand(
+                Command::Cmd55,
+                0,
+                0xFF,
+                Response::Idle))
+        {
+            return false;
+        }
+
+        if (SendCommand(
+                Command::Acmd41,
+                0x40000000,
+                0xFF,
+                Response::Ready))
+        {
+            break;
+        }
+    }
+
+    // CMD58
+    if (!SendCommand(
+            Command::Cmd58,
+            0,
+            0xFF,
+            Response::Ready,
+            response,
+            4))
+    {
+        return false;
+    }
+
+    m_highCapacity = (response[0] & 0x40) != 0;
+
+    m_spi.SetHighSpeed();
+
+    return true;
 }
-void SDCard::Deselect()
+
+bool SDCard::ReadBlock(
+    std::uint32_t block,
+    std::uint8_t* buffer)
 {
-    gpio_put(
-        atlas::hardware::Pinout::SD::ChipSelect,
-        true);
-}
+    m_lastReadResult = ReadResult::Success;
+    m_lastResponse = 0xFF;
 
-std::uint8_t SDCard::Transfer(std::uint8_t data)
-{
-    std::uint8_t received;
+    if (!m_highCapacity)
+    {
+        block <<= 9;
+    }
 
-    spi_write_read_blocking(
-        spi0,
-        &data,
-        &received,
-        1);
+    if (!m_spi.WaitReady())
+    {
+        m_lastReadResult = ReadResult::CommandTimeout;
+        return false;
+    }
 
-    return received;
+    m_spi.Select();
+
+    m_spi.Transfer(
+        0x40 | static_cast<std::uint8_t>(Command::Cmd17));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(block >> 24));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(block >> 16));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(block >> 8));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(block));
+
+    m_spi.Transfer(0xFF);
+
+    std::uint8_t response;
+
+    if (!WaitResponse(response))
+    {
+        m_lastReadResult = ReadResult::CommandTimeout;
+        m_spi.Deselect();
+        return false;
+    }
+
+    if (response != 0x00)
+    {
+        m_lastReadResult = ReadResult::InvalidResponse;
+        m_lastResponse = response;
+        m_spi.Deselect();
+        return false;
+    }
+
+    std::uint8_t token;
+
+    if (!WaitDataToken(token))
+    {
+        m_lastReadResult = ReadResult::TokenTimeout;
+        m_spi.Deselect();
+        return false;
+    }
+
+    if (token != 0xFE)
+    {
+        m_lastReadResult = ReadResult::InvalidDataToken;
+        m_lastResponse = token;
+        m_spi.Deselect();
+        return false;
+    }
+
+    for (std::size_t i = 0; i < 512; ++i)
+    {
+        buffer[i] = m_spi.Transfer(0xFF);
+    }
+
+    // CRC
+    m_spi.Transfer(0xFF);
+    m_spi.Transfer(0xFF);
+
+    m_spi.Deselect();
+
+    return true;
 }
 
 bool SDCard::SendCommand(
     Command command,
     std::uint32_t argument,
     std::uint8_t crc,
-    std::uint8_t& response,
-    std::uint8_t* data,
-    std::size_t length)
+    Response expectedResponse,
+    std::uint8_t* response,
+    std::size_t responseLength)
 {
-    Select();
-
-    Transfer(0x40 | static_cast<std::uint8_t>(command));
-
-    Transfer(static_cast<std::uint8_t>(argument >> 24));
-    Transfer(static_cast<std::uint8_t>(argument >> 16));
-    Transfer(static_cast<std::uint8_t>(argument >> 8));
-    Transfer(static_cast<std::uint8_t>(argument));
-
-    Transfer(crc);
-
-    for (std::uint8_t i = 0; i < 10; ++i)
+    if (!m_spi.WaitReady())
     {
-        response = Transfer(DummyByte);
+        return false;
+    }
+
+    m_spi.Select();
+
+    m_spi.Transfer(
+        0x40 | static_cast<std::uint8_t>(command));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(argument >> 24));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(argument >> 16));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(argument >> 8));
+
+    m_spi.Transfer(
+        static_cast<std::uint8_t>(argument));
+
+    m_spi.Transfer(crc);
+
+    std::uint8_t r1;
+
+    if (!WaitResponse(r1))
+    {
+        m_spi.Deselect();
+        return false;
+    }
+
+    if (response != nullptr)
+    {
+        for (std::size_t i = 0; i < responseLength; ++i)
+        {
+            response[i] = m_spi.Transfer(0xFF);
+        }
+    }
+
+    if (r1 != static_cast<std::uint8_t>(expectedResponse))
+    {
+        m_spi.Deselect();
+        return false;
+    }
+
+    m_spi.Deselect();
+
+    return true;
+}
+
+bool SDCard::WaitResponse(
+    std::uint8_t& response)
+{
+    for (std::uint32_t i = 0; i < 16; ++i)
+    {
+        response = m_spi.Transfer(0xFF);
 
         if ((response & 0x80) == 0)
         {
-            for (std::size_t j = 0; j < length; ++j)
-            {
-                data[j] = Transfer(DummyByte);
-            }
-
-            Deselect();
+            m_lastResponse = response;
             return true;
         }
     }
 
-    Deselect();
     return false;
 }
 
-bool SDCard::Initialize()
+bool SDCard::WaitDataToken(std::uint8_t& token)
 {
-    spi_init(spi0, SpiBaudrate);
-
-    gpio_set_function(
-        atlas::hardware::Pinout::SD::Clock,
-        GPIO_FUNC_SPI);
-
-    gpio_set_function(
-        atlas::hardware::Pinout::SD::Mosi,
-        GPIO_FUNC_SPI);
-
-    gpio_set_function(
-        atlas::hardware::Pinout::SD::Miso,
-        GPIO_FUNC_SPI);
-
-    gpio_init(
-        atlas::hardware::Pinout::SD::ChipSelect);
-
-    gpio_set_dir(
-        atlas::hardware::Pinout::SD::ChipSelect,
-        GPIO_OUT);
-
-    Deselect();
-
-    // SD specification requires at least 74 clock cycles
-    // with CS high before the first command.
-    for (int i = 0; i < 10; ++i)
+    for (std::uint32_t i = 0; i < 100000; ++i)
     {
-        Transfer(DummyByte);
-    }
+        token = m_spi.Transfer(0xFF);
 
-    std::uint8_t response = 0xFF;
-
-    if (!SendCommand(
-            Command::Cmd0,
-            0x00000000,
-            0x95,
-            response))
-    {
-        return false;
-    }
-
-    if (response != 0x01)
-    {
-        return false;
-    }
-
-    std::uint8_t cmd8Response[4];
-
-    if (!SendCommand(
-            Command::Cmd8,
-            0x000001AA,
-            0x87,
-            response,
-            cmd8Response,
-            4))
-    {
-        return false;
-    }
-
-    if (response != 0x01)
-    {
-        return false;
-    }
-
-    if (cmd8Response[2] != 0x01 || cmd8Response[3] != 0xAA)
-    {
-        return false;
-    }
-
-    while (true)
-    {
-        if (!SendCommand(
-                Command::Cmd55,
-                0x00000000,
-                0x01,
-                response))
+        if (token == 0xFF)
         {
-            return false;
+            continue;
         }
 
-        if (!SendCommand(
-                Command::Acmd41,
-                0x40000000,
-                0x01,
-                response))
-        {
-            return false;
-        }
-
-        if (response == 0x00)
-        {
-            break;
-        }
+        return true;
     }
 
-    std::uint8_t ocr[4];
+    return false;
+}
 
-    if (!SendCommand(
-            Command::Cmd58,
-            0x00000000,
-            0x01,
-            response,
-            ocr,
-            4))
-    {
-        return false;
-    }
+ReadResult SDCard::GetLastReadResult() const
+{
+    return m_lastReadResult;
+}
 
-    if (response != 0x00)
-    {
-        return false;
-    }
-
-    spi_set_baudrate(spi0, 25'000'000);
-
-    return true;
+std::uint8_t SDCard::GetLastResponse() const
+{
+    return m_lastResponse;
 }
 
 }

@@ -52,4 +52,14 @@ Storage::ListDirectory(const std::string&)
     return {};
 }
 
+bool Storage::TestReadBlock(){
+   std::uint8_t buffer[512];
+   return m_sdCard.ReadBlock(0, buffer);
+}
+
+const sd::SDCard& Storage::GetSDCard() const
+{
+    return m_sdCard;
+}
+
 }

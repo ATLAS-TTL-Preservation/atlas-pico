@@ -22,6 +22,7 @@ add_executable(atlas-pico
     src/system/System.cpp
     src/storage/Storage.cpp
     src/storage/sd/SDCard.cpp
+    src/storage/sd/SPIBus.cpp
 )
 
 target_include_directories(atlas-pico

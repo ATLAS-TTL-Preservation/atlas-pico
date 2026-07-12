@@ -19,6 +19,8 @@ public:
 
     bool Init();
 
+    bool TestReadBlock();
+
     bool Exists(const std::string& path) const;
 
     bool CreateDirectory(const std::string& path);
@@ -39,6 +41,8 @@ public:
 
     std::vector<DirectoryEntry>
     ListDirectory(const std::string& path);
+
+    const sd::SDCard& GetSDCard() const;
 
 private:
     sd::SDCard m_sdCard;

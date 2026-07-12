@@ -40,9 +40,11 @@ bool Storage::CreateDirectory(
         f_mkdir(path.c_str()) == FR_OK;
 }
 
-bool Storage::Delete(const std::string&)
+bool Storage::Delete(
+    const std::string& path)
 {
-    return false;
+    return
+        f_unlink(path.c_str()) == FR_OK;
 }
 
 bool Storage::ReadFile(

@@ -35,16 +35,18 @@ void Application::Initialize()
     }
     if (m_storage.Exists("/KAOS"))
     {
-        m_display.DrawText(5, 15, "FOLDER EXISTS");
+        m_display.DrawText(5, 15, "FOLDER EXISTS. DELETING.");
+        if (m_storage.Delete("/KAOS"))
+        {
+            m_display.DrawText(5, 25, "DELETE OK");
+        }
+        else
+        {
+            m_display.DrawText(5, 25, "DELETE FAIL");
+        }
     }
     else{
-        m_display.DrawText(5, 15, "CREATING FOLDER");
-        if(m_storage.CreateDirectory("KAOS")){
-             m_display.DrawText(5, 25, "CREATED FOLDER");
-        }
-        else{
-             m_display.DrawText(5, 25, "FAILD TO CREATE");
-        }
+        m_display.DrawText(5, 15, "FOLDER DOESNT EXIST");
 
     }
     

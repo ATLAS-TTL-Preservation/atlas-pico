@@ -33,19 +33,17 @@ void Application::Initialize()
     {
         m_display.DrawText(5,5,"MOUNT FAIL");
     }
-    auto entries = m_storage.ListDirectory("/");
-    int y = 15;
+    std::vector<std::uint8_t> data;
 
-    for (const auto& entry : entries)   
+    if (m_storage.ReadFile(
+        "/config.ptpe",
+        data))
     {
-        m_display.DrawText(5,y,entry.Name.c_str());
+        data.push_back('\0');
 
-        y += 10;
+        m_display.Clear();
 
-        if (y > 150)
-        {
-            break;
-        }
+        m_display.DrawText(5,15,reinterpret_cast<char*>(data.data()));
     }
 }
 

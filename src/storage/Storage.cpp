@@ -1,4 +1,5 @@
 #include <atlas/storage/Storage.hpp>
+#include <atlas/storage/fatfs/DiskIO.hpp>
 
 namespace atlas::storage
 {
@@ -7,7 +8,14 @@ Storage::Storage() = default;
 
 bool Storage::Init()
 {
-    return m_sdCard.Initialize();
+    if (!m_sdCard.Initialize())
+    {
+        return false;
+    }
+
+    atlas::storage::fatfs::Initialize(m_sdCard);
+
+    return true;
 }
 
 bool Storage::Exists(const std::string&) const
@@ -55,6 +63,11 @@ Storage::ListDirectory(const std::string&)
 bool Storage::TestReadBlock(){
    std::uint8_t buffer[512];
    return m_sdCard.ReadBlock(0, buffer);
+}
+
+sd::SDCard& Storage::GetSDCard()
+{
+    return m_sdCard;
 }
 
 const sd::SDCard& Storage::GetSDCard() const

@@ -42,6 +42,8 @@ public:
     std::vector<DirectoryEntry>
     ListDirectory(const std::string& path);
 
+    sd::SDCard& GetSDCard();
+
     const sd::SDCard& GetSDCard() const;
 
 private:

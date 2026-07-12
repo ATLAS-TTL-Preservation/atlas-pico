@@ -23,11 +23,16 @@ add_executable(atlas-pico
     src/storage/Storage.cpp
     src/storage/sd/SDCard.cpp
     src/storage/sd/SPIBus.cpp
+    src/storage/fatfs/DiskIO.cpp
+    third_party/fatfs/ff.c
+    third_party/fatfs/ffsystem.c
+    third_party/fatfs/ffunicode.c
 )
 
 target_include_directories(atlas-pico
     PRIVATE
         include
+        third_party/fatfs
 )
 
 target_link_libraries(atlas-pico

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <atlas/input/Input.hpp>
 #include <atlas/gpio/ButtonManager.hpp>
+
+#include <atlas/input/Input.hpp>
 
 namespace atlas::input
 {
@@ -9,8 +10,6 @@ namespace atlas::input
 class InputManager
 {
 public:
-
-    InputManager() = default;
 
     void Update(
         const atlas::gpio::ButtonManager& buttons);

@@ -11,9 +11,9 @@ struct Input
 
     bool Select = false;
 
-    bool Action1 = false;
+    bool ButtonA = false;
 
-    bool Action2 = false;
+    bool ButtonB = false;
 };
 
 }

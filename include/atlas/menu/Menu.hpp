@@ -2,17 +2,13 @@
 
 #include <atlas/display/Display.hpp>
 
-namespace atlas::input
-{
-struct Input;
-}
-
 namespace atlas::menu
 {
 
 class Menu
 {
 public:
+
     virtual ~Menu() = default;
 
     virtual const char* Title() const
@@ -36,11 +32,11 @@ public:
     virtual void Draw(
         atlas::display::Display& display) = 0;
 
-    virtual void OnLeft()
+    virtual void OnPrevious()
     {
     }
 
-    virtual void OnRight()
+    virtual void OnNext()
     {
     }
 
@@ -48,11 +44,11 @@ public:
     {
     }
 
-    virtual void OnAction1()
+    virtual void OnContext()
     {
     }
 
-    virtual void OnAction2()
+    virtual void OnBack()
     {
     }
 

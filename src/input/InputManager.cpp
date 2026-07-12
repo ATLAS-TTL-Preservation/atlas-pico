@@ -18,11 +18,11 @@ void InputManager::Update(
         buttons.IsPressed(
             atlas::gpio::Button::Select);
 
-    m_input.Action1 =
+    m_input.ButtonA =
         buttons.IsPressed(
             atlas::gpio::Button::Action1);
 
-    m_input.Action2 =
+    m_input.ButtonB =
         buttons.IsPressed(
             atlas::gpio::Button::Action2);
 }

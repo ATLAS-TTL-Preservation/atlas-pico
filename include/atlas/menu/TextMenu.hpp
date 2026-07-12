@@ -11,6 +11,7 @@ namespace atlas::menu
 class TextMenu : public Menu
 {
 public:
+
     static constexpr std::size_t MaxEntries = 16;
 
     struct Entry
@@ -34,17 +35,31 @@ public:
     void Draw(
         atlas::display::Display& display) override;
 
-    void OnLeft() override;
+    void OnPrevious() override;
 
-    void OnRight() override;
+    void OnNext() override;
+
+    void OnContext() override;
+
+    void OnBack() override;
 
 protected:
+
     virtual std::string_view Footer() const
     {
         return "";
     }
 
 private:
+
+    void DrawStatic(
+        atlas::display::Display& display);
+
+    void DrawSelection(
+        atlas::display::Display& display);
+
+private:
+
     std::array<Entry, MaxEntries> m_entries;
 
     std::size_t m_entryCount = 0;

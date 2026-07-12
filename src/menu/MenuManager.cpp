@@ -29,12 +29,12 @@ void MenuManager::Update(
 
     if (input.Left && !m_lastLeft)
     {
-        m_current->OnLeft();
+        m_current->OnPrevious();
     }
 
     if (input.Right && !m_lastRight)
     {
-        m_current->OnRight();
+        m_current->OnNext();
     }
 
     if (input.Select && !m_lastSelect)
@@ -42,23 +42,25 @@ void MenuManager::Update(
         m_current->OnSelect();
     }
 
-    if (input.Action1 && !m_lastAction1)
+    if (input.ButtonA && !m_lastButtonA)
     {
-        m_current->OnAction1();
+        m_current->OnContext();
     }
 
-    if (input.Action2 && !m_lastAction2)
+    if (input.ButtonB && !m_lastButtonB)
     {
-        m_current->OnAction2();
+        m_current->OnBack();
     }
 
     m_current->Update();
 
     m_lastLeft = input.Left;
     m_lastRight = input.Right;
+
     m_lastSelect = input.Select;
-    m_lastAction1 = input.Action1;
-    m_lastAction2 = input.Action2;
+
+    m_lastButtonA = input.ButtonA;
+    m_lastButtonB = input.ButtonB;
 }
 
 void MenuManager::Draw(

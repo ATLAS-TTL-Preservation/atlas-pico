@@ -5,14 +5,19 @@
 namespace atlas::menu
 {
 
-class MainMenu : public TextMenu
+class MainMenu :
+    public TextMenu
 {
 public:
+
     const char* Title() const override;
 
     void Enter() override;
 
+    void OnSelect() override;
+
 protected:
+
     std::string_view Footer() const override;
 };
 

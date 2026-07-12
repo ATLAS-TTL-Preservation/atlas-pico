@@ -59,6 +59,14 @@ void TextMenu::Draw(
 {
     display.Clear();
 
+    DrawStatic(display);
+
+    DrawSelection(display);
+}
+
+void TextMenu::DrawStatic(
+    atlas::display::Display& display)
+{
     constexpr int HeaderY = 5;
     constexpr int Divider1Y = 18;
 
@@ -88,14 +96,6 @@ void TextMenu::Draw(
             5,
             y,
             m_entries[i].Text.data());
-
-        if (i == m_selectedIndex)
-        {
-            display.DrawText(
-                display.GetWidth() - 12,
-                y,
-                "<");
-        }
     }
 
     display.DrawHorizontalLine(
@@ -108,13 +108,39 @@ void TextMenu::Draw(
         FooterY,
         Footer().data());
 }
-void TextMenu::OnLeft()
+
+void TextMenu::DrawSelection(
+    atlas::display::Display& display)
+{
+    constexpr int FirstEntryY = 28;
+    constexpr int EntryHeight = 12;
+
+    const int y =
+        FirstEntryY +
+        static_cast<int>(m_selectedIndex) * EntryHeight;
+
+    display.DrawText(
+        display.GetWidth() - 12,
+        y,
+        "<");
+}
+
+void TextMenu::OnPrevious()
 {
     MoveUp();
 }
 
-void TextMenu::OnRight()
+void TextMenu::OnNext()
 {
     MoveDown();
 }
+
+void TextMenu::OnContext()
+{
+}
+
+void TextMenu::OnBack()
+{
+}
+
 }

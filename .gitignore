@@ -1,69 +1,40 @@
-# Prerequisites
-*.d
-
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Linker files
-*.ilk
-
-# Debugger Files
-*.pdb
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-*.so.*
-
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Build directories
+# Build
 build/
-Build/
-build-*/
+cmake-build-*/
 
-# CMake generated files
+# VS Code
+.vscode/
+
+# CMake
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
-Makefile
-install_manifest.txt
 compile_commands.json
 
-# Temporary files
+# Ninja
+.ninja*
+build.ninja
+
+# Pico SDK (wenn lokal eingebunden)
+pico-sdk/
+
+# Temporary
 *.tmp
-*.log
 *.bak
-*.swp
+*.log
 
-# vcpkg
-vcpkg_installed/
+# macOS
+.DS_Store
 
-# debug information files
-*.dwo
+# Windows
+Thumbs.db
 
-# test output & cache
-Testing/
-.cache/
+# Python (falls Build-Skripte)
+__pycache__/
+
+# Generated UF2/BIN/ELF
+*.uf2
+*.bin
+*.elf
+*.hex
+*.map

@@ -120,10 +120,33 @@ bool Storage::WriteFile(
 }
 
 bool Storage::AppendFile(
-    const std::string&,
-    const std::vector<std::uint8_t>&)
+    const std::string& path,
+    const std::vector<std::uint8_t>& data)
 {
-    return false;
+    FIL file;
+
+    if (f_open(
+            &file,
+            path.c_str(),
+            FA_OPEN_APPEND | FA_WRITE) != FR_OK)
+    {
+        return false;
+    }
+
+    UINT bytesWritten = 0;
+
+    const FRESULT result =
+        f_write(
+            &file,
+            data.data(),
+            static_cast<UINT>(data.size()),
+            &bytesWritten);
+
+    f_close(&file);
+
+    return
+        result == FR_OK &&
+        bytesWritten == data.size();
 }
 
 std::vector<DirectoryEntry>

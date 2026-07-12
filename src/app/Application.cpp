@@ -25,15 +25,13 @@ void Application::Initialize()
     m_led.Init();
     m_buttons.Init();
     m_display.Init();
-    if(m_storage.Init()){
-        m_display.DrawText(0,0,"SD OK");
-        if(m_storage.TestReadBlock()){
-             m_display.DrawText(0,10,"READ OK");
-        }else{
-            m_display.DrawText(0,10,"READ FAIL");
-        }
-    }else{
-        m_display.DrawText(0,0,"SD FAIL");
+    if (m_storage.Init())
+    {
+        m_display.DrawText(5,5,"MOUNT OK");
+    }
+    else
+    {
+        m_display.DrawText(5,5,"MOUNT FAIL");
     }
 
 }

@@ -9,6 +9,8 @@
 
 #include <atlas/storage/sd/SDCard.hpp>
 
+#include <ff.h>
+
 namespace atlas::storage
 {
 
@@ -48,6 +50,7 @@ public:
 
 private:
     sd::SDCard m_sdCard;
+    FATFS m_fileSystem;
 };
 
 }

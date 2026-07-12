@@ -15,7 +15,13 @@ bool Storage::Init()
 
     atlas::storage::fatfs::Initialize(m_sdCard);
 
-    return true;
+    const FRESULT result =
+        f_mount(
+            &m_fileSystem,
+            "",
+            1);
+
+    return result == FR_OK;
 }
 
 bool Storage::Exists(const std::string&) const

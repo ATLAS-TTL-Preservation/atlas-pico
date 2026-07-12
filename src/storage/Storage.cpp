@@ -5,7 +5,7 @@ namespace atlas::storage
 
 Storage::Storage() = default;
 
-bool Storage::Initialize()
+bool Storage::Init()
 {
     return m_sdCard.Initialize();
 }

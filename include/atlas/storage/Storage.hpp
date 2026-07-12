@@ -17,7 +17,7 @@ class Storage
 public:
     Storage();
 
-    bool Initialize();
+    bool Init();
 
     bool Exists(const std::string& path) const;
 

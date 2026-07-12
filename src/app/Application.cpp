@@ -1,5 +1,6 @@
 #include <atlas/app/Application.hpp>
 #include <atlas/system/System.hpp>
+
 #include <atlas/hardware/LedPattern.hpp>
 
 using namespace std::chrono_literals;
@@ -24,6 +25,7 @@ void Application::Initialize()
     m_led.Init();
     m_buttons.Init();
     m_display.Init();
+    m_storage.Init();
     m_display.DrawText(0,0,"Hello World");
 }
 

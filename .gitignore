@@ -15,9 +15,6 @@ compile_commands.json
 .ninja*
 build.ninja
 
-# Pico SDK (wenn lokal eingebunden)
-pico-sdk/
-
 # Temporary
 *.tmp
 *.bak

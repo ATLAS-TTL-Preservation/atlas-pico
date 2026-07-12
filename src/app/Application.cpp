@@ -33,7 +33,20 @@ void Application::Initialize()
     {
         m_display.DrawText(5,5,"MOUNT FAIL");
     }
+    auto entries = m_storage.ListDirectory("/");
+    int y = 15;
 
+    for (const auto& entry : entries)   
+    {
+        m_display.DrawText(5,y,entry.Name.c_str());
+
+        y += 10;
+
+        if (y > 150)
+        {
+            break;
+        }
+    }
 }
 
 void Application::Loop()

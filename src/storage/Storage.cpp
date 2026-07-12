@@ -61,9 +61,44 @@ bool Storage::AppendFile(
 }
 
 std::vector<DirectoryEntry>
-Storage::ListDirectory(const std::string&)
+Storage::ListDirectory(const std::string& path)
 {
-    return {};
+    std::vector<DirectoryEntry> entries;
+
+    DIR dir;
+
+    if (f_opendir(&dir, path.c_str()) != FR_OK)
+    {
+        return entries;
+    }
+
+    while (true)
+    {
+        FILINFO info;
+
+        if (f_readdir(&dir, &info) != FR_OK)
+        {
+            break;
+        }
+
+        if (info.fname[0] == '\0')
+        {
+            break;
+        }
+
+        DirectoryEntry entry;
+
+        entry.Name = info.fname;
+        entry.Size = info.fsize;
+        entry.IsDirectory =
+            (info.fattrib & AM_DIR) != 0;
+
+        entries.push_back(entry);
+    }
+
+    f_closedir(&dir);
+
+    return entries;
 }
 
 bool Storage::TestReadBlock(){

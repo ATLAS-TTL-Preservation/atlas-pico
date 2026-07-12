@@ -27,6 +27,13 @@ struct Pinout
         static constexpr unsigned int Dc   = 10;
         static constexpr unsigned int Rst  = 11;
     };
+    struct SD
+    {
+        static constexpr unsigned int Clock = 6;
+        static constexpr unsigned int Mosi  = 7;
+        static constexpr unsigned int Miso  = 4;
+        static constexpr unsigned int ChipSelect = 5;
+    };
 };
 
 } // namespace atlas::hardware

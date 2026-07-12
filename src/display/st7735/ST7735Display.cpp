@@ -12,8 +12,11 @@
 
 #include <atlas/system/System.hpp>
 
+
+
 using namespace std::chrono_literals;
 using atlas::system::System;
+using atlas::hardware::Pinout;
 
 namespace atlas::display::st7735
 {
@@ -39,35 +42,35 @@ void ST7735Display::InitializeSpi()
     spi_init(spi1, 40000000);
 
     gpio_set_function(
-        atlas::hardware::Pinout::Display::Sck,
+        Pinout::Display::Sck,
         GPIO_FUNC_SPI);
 
     gpio_set_function(
-        atlas::hardware::Pinout::Display::Mosi,
+        Pinout::Display::Mosi,
         GPIO_FUNC_SPI);
 }
 
 void ST7735Display::InitializePins()
 {
-    gpio_init(atlas::hardware::Pinout::Display::Cs);
-    gpio_set_dir(atlas::hardware::Pinout::Display::Cs, GPIO_OUT);
-    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+    gpio_init(Pinout::Display::Cs);
+    gpio_set_dir(Pinout::Display::Cs, GPIO_OUT);
+    gpio_put(Pinout::Display::Cs, true);
 
-    gpio_init(atlas::hardware::Pinout::Display::Dc);
-    gpio_set_dir(atlas::hardware::Pinout::Display::Dc, GPIO_OUT);
-    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
+    gpio_init(Pinout::Display::Dc);
+    gpio_set_dir(Pinout::Display::Dc, GPIO_OUT);
+    gpio_put(Pinout::Display::Dc, true);
 
-    gpio_init(atlas::hardware::Pinout::Display::Rst);
-    gpio_set_dir(atlas::hardware::Pinout::Display::Rst, GPIO_OUT);
-    gpio_put(atlas::hardware::Pinout::Display::Rst, true);
+    gpio_init(Pinout::Display::Rst);
+    gpio_set_dir(Pinout::Display::Rst, GPIO_OUT);
+    gpio_put(Pinout::Display::Rst, true);
 }
 
 void ST7735Display::Reset()
 {
-    gpio_put(atlas::hardware::Pinout::Display::Rst, false);
+    gpio_put(Pinout::Display::Rst, false);
     System::Delay(10ms);
 
-    gpio_put(atlas::hardware::Pinout::Display::Rst, true);
+    gpio_put(Pinout::Display::Rst, true);
     System::Delay(150ms);
 }
 
@@ -124,33 +127,33 @@ void ST7735Display::SetRotation(Rotation rotation)
 
 void ST7735Display::WriteCommand(Command command)
 {
-    gpio_put(atlas::hardware::Pinout::Display::Dc, false);
-    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+    gpio_put(Pinout::Display::Dc, false);
+    gpio_put(Pinout::Display::Cs, false);
 
     const auto value = static_cast<std::uint8_t>(command);
     spi_write_blocking(spi1, &value, 1);
 
-    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+    gpio_put(Pinout::Display::Cs, true);
 }
 
 void ST7735Display::WriteData(std::uint8_t data)
 {
-    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
-    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+    gpio_put(Pinout::Display::Dc, true);
+    gpio_put(Pinout::Display::Cs, false);
 
     spi_write_blocking(spi1, &data, 1);
 
-    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+    gpio_put(Pinout::Display::Cs, true);
 }
 
 void ST7735Display::WriteData(const std::uint8_t* data, std::size_t length)
 {
-    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
-    gpio_put(atlas::hardware::Pinout::Display::Cs, false);
+    gpio_put(Pinout::Display::Dc, true);
+    gpio_put(Pinout::Display::Cs, false);
 
     spi_write_blocking(spi1, data, length);
 
-    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+    gpio_put(Pinout::Display::Cs, true);
 }
 
 void ST7735Display::DrawCharacter(

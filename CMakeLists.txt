@@ -20,6 +20,8 @@ add_executable(atlas-pico
     src/graphics/Font.cpp
     src/graphics/fonts/IBMVGA.cpp
     src/system/System.cpp
+    src/storage/Storage.cpp
+    src/storage/sd/SDCard.cpp
 )
 
 target_include_directories(atlas-pico

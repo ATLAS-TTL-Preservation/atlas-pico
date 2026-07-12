@@ -24,6 +24,7 @@ void Application::Initialize()
     m_led.Init();
     m_buttons.Init();
     m_display.Init();
+    m_display.DrawText(0,0,"Hello World");
 }
 
 void Application::Loop()

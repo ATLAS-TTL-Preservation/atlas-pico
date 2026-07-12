@@ -1,7 +1,6 @@
 #pragma once
 
 #include <atlas/menu/Menu.hpp>
-#include <atlas/display/Display.hpp>
 
 namespace atlas::menu
 {
@@ -14,7 +13,8 @@ public:
 
     void Update();
 
-    virtual void Draw(atlas::display::Display& display);
+    void Draw(
+        atlas::display::Display& display);
 
 private:
 

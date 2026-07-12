@@ -27,17 +27,25 @@ void Application::Initialize()
     m_display.Init();
     if (!m_storage.Init())
     {
-        m_led.SetPattern(LedPattern::Error);
+        m_display.Clear();
+        m_display.DrawText(5, 5, "SD MOUNT FAIL");
+
+        while (true)
+        {
+            System::Yield();
+        }
     }
-    else{
-        m_display.DrawText(0,0,"Welcome to ATLAS!");
-    }
+
+    m_menuManager.SetMenu(&m_mainMenu);
 
 }
 
 void Application::Loop()
 {
-     m_led.Update(); 
+    m_menuManager.Update();
+
+    m_menuManager.Draw(m_display);
+    m_led.Update(); 
 }
 
 }

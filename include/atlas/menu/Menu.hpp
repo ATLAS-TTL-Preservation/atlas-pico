@@ -17,6 +17,7 @@ public:
 
     virtual void Enter()
     {
+        Invalidate();
     }
 
     virtual void Exit()
@@ -29,6 +30,27 @@ public:
 
     virtual void Draw(
         atlas::display::Display& display) = 0;
+
+    bool NeedsRedraw() const
+    {
+        return m_dirty;
+    }
+
+    void Validate()
+    {
+        m_dirty = false;
+    }
+
+protected:
+
+    void Invalidate()
+    {
+        m_dirty = true;
+    }
+
+private:
+
+    bool m_dirty = true;
 };
 
-} // namespace atlas::menu
+}

@@ -29,10 +29,19 @@ void MenuManager::Update()
 void MenuManager::Draw(
     atlas::display::Display& display)
 {
-    if (m_current != nullptr)
+    if (m_current == nullptr)
     {
-        m_current->Draw(display);
+        return;
     }
+
+    if (!m_current->NeedsRedraw())
+    {
+        return;
+    }
+
+    m_current->Draw(display);
+
+    m_current->Validate();
 }
 
-} // namespace atlas::menu
+}

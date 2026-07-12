@@ -1,9 +1,69 @@
 #include <atlas/display/ST7735Display.hpp>
 
+#include <atlas/hardware/Pinout.hpp>
+
+#include <pico/stdlib.h>
+
+#include <hardware/gpio.h>
+#include <hardware/spi.h>
+
 namespace atlas::display
 {
 
 void ST7735Display::Init()
+{
+    InitializeSpi();
+    InitializePins();
+
+    Reset();
+}
+
+void ST7735Display::InitializeSpi()
+{
+    spi_init(spi1, 40000000);
+
+    gpio_set_function(
+        atlas::hardware::Pinout::Display::Sck,
+        GPIO_FUNC_SPI);
+
+    gpio_set_function(
+        atlas::hardware::Pinout::Display::Mosi,
+        GPIO_FUNC_SPI);
+}
+
+void ST7735Display::InitializePins()
+{
+    gpio_init(atlas::hardware::Pinout::Display::Cs);
+    gpio_set_dir(atlas::hardware::Pinout::Display::Cs, GPIO_OUT);
+    gpio_put(atlas::hardware::Pinout::Display::Cs, true);
+
+    gpio_init(atlas::hardware::Pinout::Display::Dc);
+    gpio_set_dir(atlas::hardware::Pinout::Display::Dc, GPIO_OUT);
+    gpio_put(atlas::hardware::Pinout::Display::Dc, true);
+
+    gpio_init(atlas::hardware::Pinout::Display::Rst);
+    gpio_set_dir(atlas::hardware::Pinout::Display::Rst, GPIO_OUT);
+    gpio_put(atlas::hardware::Pinout::Display::Rst, true);
+}
+
+void ST7735Display::Reset()
+{
+    gpio_put(atlas::hardware::Pinout::Display::Rst, false);
+    sleep_ms(10);
+
+    gpio_put(atlas::hardware::Pinout::Display::Rst, true);
+    sleep_ms(150);
+}
+
+void ST7735Display::WriteCommand(std::uint8_t)
+{
+}
+
+void ST7735Display::WriteData(std::uint8_t)
+{
+}
+
+void ST7735Display::WriteData(const std::uint8_t*, std::size_t)
 {
 }
 

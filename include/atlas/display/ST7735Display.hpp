@@ -2,6 +2,10 @@
 
 #include <atlas/display/Display.hpp>
 
+#include <cstddef>
+#include <cstdint>
+#include <string_view>
+
 namespace atlas::display
 {
 
@@ -31,6 +35,16 @@ public:
 
     [[nodiscard]]
     std::uint16_t GetHeight() const override;
+
+private:
+    void InitializeSpi();
+    void InitializePins();
+
+    void Reset();
+
+    void WriteCommand(std::uint8_t command);
+    void WriteData(std::uint8_t data);
+    void WriteData(const std::uint8_t* data, std::size_t length);
 
 private:
     static constexpr std::uint16_t Width = 160;

@@ -10,6 +10,11 @@
 #include <hardware/spi.h>
 #include <pico/stdlib.h>
 
+#include <atlas/system/System.hpp>
+
+using namespace std::chrono_literals;
+using atlas::system::System;
+
 namespace atlas::display::st7735
 {
 
@@ -26,7 +31,7 @@ void ST7735Display::Init()
     Clear();
     WriteCommand(Command::DisplayOn);
 
-    sleep_ms(100);
+    System::Delay(100ms);
 }
 
 void ST7735Display::InitializeSpi()
@@ -60,21 +65,21 @@ void ST7735Display::InitializePins()
 void ST7735Display::Reset()
 {
     gpio_put(atlas::hardware::Pinout::Display::Rst, false);
-    sleep_ms(10);
+    System::Delay(10ms);
 
     gpio_put(atlas::hardware::Pinout::Display::Rst, true);
-    sleep_ms(150);
+    System::Delay(150ms);
 }
 
 void ST7735Display::InitializeController()
 {
     // Software Reset
     WriteCommand(Command::SoftwareReset);
-    sleep_ms(150);
+    System::Delay(150ms);
 
     // Sleep Out
     WriteCommand(Command::SleepOut);
-    sleep_ms(150);
+    System::Delay(150ms);
 
     WriteCommand(Command::InterfacePixelFormat);
     WriteData(0x05);

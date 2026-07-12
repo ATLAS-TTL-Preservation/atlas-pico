@@ -17,6 +17,17 @@ public:
     /// Clears the entire display.
     virtual void Clear() = 0;
 
+    /// Draws a Pixel
+    virtual void DrawPixel(
+        std::uint16_t x,
+        std::uint16_t y) = 0;
+
+    /// Draws a vertical line
+    virtual void DrawVerticalLine(
+        std::uint16_t x,
+        std::uint16_t y,
+        std::uint16_t length) = 0;
+
     /// Draws a horizontal line.
     virtual void DrawHorizontalLine(
         std::uint16_t x,

@@ -19,6 +19,15 @@ public:
     void Init() override;
     void Clear() override;
 
+    void DrawPixel(
+        std::uint16_t x,
+        std::uint16_t y) override;
+
+    void DrawVerticalLine(
+        std::uint16_t x,
+        std::uint16_t y,
+        std::uint16_t length) override;
+
     void DrawHorizontalLine(
         std::uint16_t x,
         std::uint16_t y,
@@ -58,6 +67,7 @@ private:
     void InitializeController();
 
 private:
+    // TODO: Width/Height will be updated when rotation support is implemented.
     static constexpr std::uint16_t Width = 128;
     static constexpr std::uint16_t Height = 160;
 };

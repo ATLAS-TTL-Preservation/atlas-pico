@@ -155,11 +155,65 @@ void ST7735Display::Clear()
     }
 }
 
-void ST7735Display::DrawHorizontalLine(
-    std::uint16_t,
-    std::uint16_t,
-    std::uint16_t)
+void ST7735Display::DrawPixel(
+    std::uint16_t x,
+    std::uint16_t y)
 {
+    SetAddressWindow(x, y, x, y);
+
+    constexpr std::uint8_t pixel[] =
+    {
+        0xFF,
+        0xFF
+    };
+
+    WriteData(pixel, sizeof(pixel));
+}
+
+void ST7735Display::DrawHorizontalLine(
+    std::uint16_t x,
+    std::uint16_t y,
+    std::uint16_t length)
+{
+    SetAddressWindow(
+        x,
+        y,
+        x + length - 1,
+        y);
+
+    constexpr std::uint8_t pixel[] =
+    {
+        0xFF,
+        0xFF
+    };
+
+    for (std::uint16_t i = 0; i < length; ++i)
+    {
+        WriteData(pixel, sizeof(pixel));
+    }
+}
+
+void ST7735Display::DrawVerticalLine(
+    std::uint16_t x,
+    std::uint16_t y,
+    std::uint16_t length)
+{
+    SetAddressWindow(
+        x,
+        y,
+        x,
+        y + length - 1);
+
+    constexpr std::uint8_t pixel[] =
+    {
+        0xFF,
+        0xFF
+    };
+
+    for (std::uint16_t i = 0; i < length; ++i)
+    {
+        WriteData(pixel, sizeof(pixel));
+    }
 }
 
 void ST7735Display::DrawText(

@@ -21,6 +21,19 @@ void Application::Initialize()
     m_buttons.Init();
     m_display.Init();
     m_display.Clear();
+
+    // Basic Smiley for testing
+    // eyes
+    m_display.DrawPixel(45, 45);
+    m_display.DrawPixel(75, 45);
+    // Mouth
+    m_display.DrawHorizontalLine(50, 65, 20);
+
+    m_display.DrawPixel(49, 64);
+    m_display.DrawPixel(70, 64);
+
+    m_display.DrawPixel(48, 63);
+    m_display.DrawPixel(71, 63);
 }
 
 void Application::Loop()

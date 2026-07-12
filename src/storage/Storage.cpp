@@ -24,9 +24,13 @@ bool Storage::Init()
     return result == FR_OK;
 }
 
-bool Storage::Exists(const std::string&) const
+bool Storage::Exists(const std::string& path) const
 {
-    return false;
+    FILINFO info;
+
+    return f_stat(
+        path.c_str(),
+        &info) == FR_OK;
 }
 
 bool Storage::CreateDirectory(const std::string&)

@@ -33,18 +33,22 @@ void Application::Initialize()
     {
         m_display.DrawText(5,5,"MOUNT FAIL");
     }
-    std::vector<std::uint8_t> data;
-
-    if (m_storage.ReadFile(
-        "/config.ptpe",
-        data))
+    if (m_storage.Exists("/config.ptpe"))
     {
-        data.push_back('\0');
-
-        m_display.Clear();
-
-        m_display.DrawText(5,15,reinterpret_cast<char*>(data.data()));
+        m_display.DrawText(5, 15, "FILE EXISTS");
     }
+    else{
+        m_display.DrawText(5, 15, "DOESNT EXISTS");
+    }
+    if (m_storage.Exists("/config2.ptpe"))
+    {
+        m_display.DrawText(5, 25, "FILE EXISTS");
+    }
+    else{
+        m_display.DrawText(5, 25, "DOESNT EXISTS");
+    }
+    
+
 }
 
 void Application::Loop()

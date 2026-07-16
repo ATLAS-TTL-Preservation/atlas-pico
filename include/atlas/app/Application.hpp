@@ -4,7 +4,7 @@
 #include <atlas/gpio/ButtonManager.hpp>
 #include <atlas/display/st7735/ST7735Display.hpp>
 #include <atlas/storage/Storage.hpp>
-#include <atlas/menu/MainMenu.hpp>
+#include <atlas/cores/atlas/menu/MainMenu.hpp>
 #include <atlas/menu/MenuManager.hpp>
 #include <atlas/input/InputManager.hpp>
 

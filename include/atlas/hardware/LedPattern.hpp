@@ -13,7 +13,7 @@ enum class LedPattern
 
     Busy,
 
-    Error
+    Fatal
 };
 
 } // namespace atlas::hardware

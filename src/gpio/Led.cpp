@@ -45,6 +45,9 @@ void Led::SetPattern(atlas::hardware::LedPattern pattern)
     }
 
     m_pattern = pattern;
+
+    Off();
+
     m_lastUpdate = System::Millis();
     m_step = 0;
 }
@@ -100,7 +103,7 @@ void Led::Update()
             break;
         }
 
-        case atlas::hardware::LedPattern::Error:
+        case atlas::hardware::LedPattern::Fatal:
         {
             static constexpr std::uint32_t Timings[] =
             {

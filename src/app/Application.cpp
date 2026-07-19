@@ -28,10 +28,17 @@ void Application::Initialize()
     if (!m_storage.Init())
     {
         m_display.Clear();
-        m_display.DrawText(5, 5, "SD MOUNT FAIL");
+        m_display.DrawText(5, 5, "Storage Error");
+        m_display.DrawText(5, 20, "Failed to mount");
+        m_display.DrawText(5, 35, "the SD card.");
+        m_display.DrawText(5, 60, "Remove or replace");
+        m_display.DrawText(5, 75, "the SD card and");
+        m_display.DrawText(5, 90, "restart ATLAS.");
+        m_led.SetPattern(LedPattern::Fatal);
 
         while (true)
         {
+            m_led.Update();
             System::Yield();
         }
     }

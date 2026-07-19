@@ -27,40 +27,32 @@ void MenuManager::Update(
         return;
     }
 
-    if (input.Left && !m_lastLeft)
+    if (input.Left.Pressed)
     {
         m_current->OnPrevious();
     }
 
-    if (input.Right && !m_lastRight)
+    if (input.Right.Pressed)
     {
         m_current->OnNext();
     }
 
-    if (input.Select && !m_lastSelect)
+    if (input.Select.Pressed)
     {
         m_current->OnSelect();
     }
 
-    if (input.ButtonA && !m_lastButtonA)
+    if (input.ButtonA.Pressed)
     {
         m_current->OnContext();
     }
 
-    if (input.ButtonB && !m_lastButtonB)
+    if (input.ButtonB.Pressed)
     {
         m_current->OnBack();
     }
 
     m_current->Update();
-
-    m_lastLeft = input.Left;
-    m_lastRight = input.Right;
-
-    m_lastSelect = input.Select;
-
-    m_lastButtonA = input.ButtonA;
-    m_lastButtonB = input.ButtonB;
 }
 
 void MenuManager::Draw(

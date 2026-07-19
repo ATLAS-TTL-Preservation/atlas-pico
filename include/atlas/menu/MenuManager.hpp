@@ -23,16 +23,6 @@ public:
 private:
 
     Menu* m_current = nullptr;
-
-    bool m_lastLeft = false;
-
-    bool m_lastRight = false;
-
-    bool m_lastSelect = false;
-
-    bool m_lastButtonA = false;
-
-    bool m_lastButtonB = false;
 };
 
 }

@@ -3,17 +3,26 @@
 namespace atlas::input
 {
 
+struct ButtonState
+{
+    bool Down = false;
+
+    bool Pressed = false;
+
+    bool Released = false;
+};
+
 struct Input
 {
-    bool Left = false;
+    ButtonState Left;
 
-    bool Right = false;
+    ButtonState Right;
 
-    bool Select = false;
+    ButtonState Select;
 
-    bool ButtonA = false;
+    ButtonState ButtonA;
 
-    bool ButtonB = false;
+    ButtonState ButtonB;
 };
 
 }

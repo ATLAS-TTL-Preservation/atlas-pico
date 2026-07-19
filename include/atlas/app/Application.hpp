@@ -4,10 +4,12 @@
 #include <atlas/gpio/ButtonManager.hpp>
 #include <atlas/display/st7735/ST7735Display.hpp>
 #include <atlas/storage/Storage.hpp>
-#include <atlas/cores/atlas/menu/MainMenu.hpp>
-#include <atlas/menu/MenuManager.hpp>
+
 #include <atlas/input/InputManager.hpp>
+
 #include <atlas/cores/common/CoreManager.hpp>
+#include <atlas/cores/common/CoreContext.hpp>
+
 #include <atlas/cores/atlas/AtlasCore.hpp>
 
 namespace atlas::app
@@ -16,6 +18,8 @@ namespace atlas::app
 class Application
 {
 public:
+    Application();
+
     void Run();
 
 private:
@@ -29,6 +33,7 @@ private:
     atlas::storage::Storage m_storage;
 
     atlas::core::CoreManager m_coreManager;
+    atlas::core::CoreContext m_coreContext;
 
     atlas::cores::AtlasCore m_atlasCore;
 

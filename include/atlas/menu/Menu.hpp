@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atlas/display/Display.hpp>
+#include <atlas/cores/common/CoreContext.hpp>
 
 namespace atlas::menu
 {
@@ -52,6 +53,12 @@ public:
     {
     }
 
+    void SetContext(
+        atlas::core::CoreContext* context)
+    {
+        m_context = context;
+    }
+
     bool NeedsRedraw() const
     {
         return m_dirty;
@@ -68,6 +75,10 @@ protected:
     {
         m_dirty = true;
     }
+
+protected:
+
+    atlas::core::CoreContext* m_context = nullptr;
 
 private:
 

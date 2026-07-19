@@ -35,6 +35,7 @@ add_executable(atlas-pico
     src/cores/atlas/menu/AboutMenu.cpp
     src/app/BootScreen.cpp
     src/cores/common/CoreManager.cpp
+    src/cores/common/CoreContext.cpp
     src/cores/atlas/AtlasCore.cpp
 )
 

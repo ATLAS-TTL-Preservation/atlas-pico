@@ -3,8 +3,18 @@
 namespace atlas::cores
 {
 
+AtlasCore::AtlasCore(
+    atlas::core::CoreContext& context)
+    : m_context(context)
+{
+}
+
 void AtlasCore::Enter()
 {
+    m_mainMenu.SetContext(&m_context);
+    m_aboutMenu.SetContext(&m_context);
+    m_settingsMenu.SetContext(&m_context);
+
     m_menuManager.SetMenu(&m_mainMenu);
 }
 

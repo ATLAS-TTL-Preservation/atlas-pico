@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atlas/cores/common/Core.hpp>
+#include <atlas/cores/common/CoreContext.hpp>
 
 #include <atlas/menu/MenuManager.hpp>
 
@@ -15,6 +16,10 @@ class AtlasCore final
     : public atlas::core::Core
 {
 public:
+
+    explicit AtlasCore(
+        atlas::core::CoreContext& context);
+
     void Enter() override;
 
     void Exit() override;
@@ -26,6 +31,9 @@ public:
         atlas::display::Display& display) override;
 
 private:
+
+    atlas::core::CoreContext& m_context;
+
     atlas::menu::MenuManager m_menuManager;
 
     atlas::menu::MainMenu m_mainMenu;

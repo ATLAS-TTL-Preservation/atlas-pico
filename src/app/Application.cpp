@@ -11,6 +11,12 @@ using atlas::hardware::LedPattern;
 namespace atlas::app
 {
 
+Application::Application()
+    : m_coreContext(m_coreManager)
+    , m_atlasCore(m_coreContext)
+{
+}
+
 void Application::Run()
 {
     Initialize();

@@ -37,6 +37,9 @@ add_executable(atlas-pico
     src/cores/common/CoreManager.cpp
     src/cores/common/CoreContext.cpp
     src/cores/atlas/AtlasCore.cpp
+    src/cores/kaos/menus/MainMenu.cpp
+    src/cores/kaos/KaosCore.cpp
+    
 )
 
 target_include_directories(atlas-pico

@@ -11,6 +11,7 @@
 #include <atlas/cores/common/CoreContext.hpp>
 
 #include <atlas/cores/atlas/AtlasCore.hpp>
+#include <atlas/cores/kaos/KaosCore.hpp>
 
 namespace atlas::app
 {
@@ -36,6 +37,7 @@ private:
     atlas::core::CoreContext m_coreContext;
 
     atlas::cores::AtlasCore m_atlasCore;
+    atlas::cores::KaosCore m_kaosCore;
 
     atlas::input::InputManager m_input;
 };

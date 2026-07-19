@@ -13,7 +13,7 @@ namespace atlas::app
 
 Application::Application()
     : m_coreContext(m_coreManager)
-    , m_atlasCore(m_coreContext)
+    , m_atlasCore(m_coreContext), m_kaosCore(m_coreContext)
 {
 }
 
@@ -72,7 +72,8 @@ void Application::Initialize()
             System::Milliseconds(
                 MinimumBootScreenTimeMs - elapsed));
     }
-
+    m_coreContext.SetAtlasCore(m_atlasCore);
+    m_coreContext.SetKaosCore(m_kaosCore);
     m_coreManager.SetCore(&m_atlasCore);
 }
 

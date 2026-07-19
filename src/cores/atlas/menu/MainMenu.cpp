@@ -1,4 +1,6 @@
 #include <atlas/cores/atlas/menu/MainMenu.hpp>
+#include <atlas/cores/kaos/KaosCore.hpp>
+#include <atlas/cores/atlas/AtlasCore.hpp>
 
 namespace atlas::menu
 {
@@ -27,7 +29,10 @@ void MainMenu::OnSelect()
     switch (SelectedIndex())
     {
     case 0:
-        // Open Skylanders Menu
+       m_context
+            ->GetCoreManager()
+            .SetCore(
+                &m_context->GetKaosCore());
         break;
 
     case 1:

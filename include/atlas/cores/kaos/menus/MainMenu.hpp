@@ -4,11 +4,11 @@
 #include <atlas/cores/common/CoreManager.hpp>
 
 
-namespace atlas::menu
+namespace atlas::cores::kaos::menus
 {
 
-class MainMenu :
-    public TextMenu
+class MainMenu final
+    : public atlas::menu::TextMenu
 {
 public:
 

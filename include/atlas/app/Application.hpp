@@ -7,6 +7,8 @@
 #include <atlas/cores/atlas/menu/MainMenu.hpp>
 #include <atlas/menu/MenuManager.hpp>
 #include <atlas/input/InputManager.hpp>
+#include <atlas/cores/common/CoreManager.hpp>
+#include <atlas/cores/atlas/AtlasCore.hpp>
 
 namespace atlas::app
 {
@@ -25,9 +27,11 @@ private:
     atlas::gpio::ButtonManager m_buttons;
     atlas::display::st7735::ST7735Display m_display;
     atlas::storage::Storage m_storage;
-    atlas::menu::MenuManager m_menuManager;
 
-    atlas::menu::MainMenu m_mainMenu;
+    atlas::core::CoreManager m_coreManager;
+
+    atlas::cores::AtlasCore m_atlasCore;
+
     atlas::input::InputManager m_input;
 };
 

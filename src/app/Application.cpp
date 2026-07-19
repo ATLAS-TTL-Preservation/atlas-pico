@@ -67,15 +67,15 @@ void Application::Initialize()
                 MinimumBootScreenTimeMs - elapsed));
     }
 
-    m_menuManager.SetMenu(&m_mainMenu);
+    m_coreManager.SetCore(&m_atlasCore);
 }
 
 void Application::Loop()
 {   
     m_input.Update(m_buttons);
-    m_menuManager.Update(m_input.GetInput());
+    m_coreManager.Update(m_input.GetInput());
 
-    m_menuManager.Draw(m_display);
+    m_coreManager.Draw(m_display);
     m_led.Update(); 
 }
 

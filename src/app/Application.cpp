@@ -2,7 +2,7 @@
 #include <atlas/system/System.hpp>
 
 #include <atlas/hardware/LedPattern.hpp>
-#include <atlas/assets/AtlasSplash.hpp>
+#include <atlas/app/BootScreen.hpp>
 
 using namespace std::chrono_literals;
 using atlas::system::System;
@@ -26,6 +26,15 @@ void Application::Initialize()
     m_led.Init();
     m_buttons.Init();
     m_display.Init();
+
+    BootScreen bootScreen(m_display);
+
+    bootScreen.Show();
+
+    const std::uint32_t bootStart = System::Millis();
+
+    bootScreen.SetStatus("Initializing Storage...");
+
     if (!m_storage.Init())
     {
         m_display.Clear();
@@ -35,6 +44,7 @@ void Application::Initialize()
         m_display.DrawText(5, 60, "Remove or replace");
         m_display.DrawText(5, 75, "the SD card and");
         m_display.DrawText(5, 90, "restart ATLAS.");
+
         m_led.SetPattern(LedPattern::Fatal);
 
         while (true)
@@ -42,6 +52,19 @@ void Application::Initialize()
             m_led.Update();
             System::Yield();
         }
+    }
+
+    bootScreen.SetStatus("         Ready         ");
+
+    constexpr std::uint32_t MinimumBootScreenTimeMs = 1000;
+
+    const std::uint32_t elapsed = System::Millis() - bootStart;
+
+    if (elapsed < MinimumBootScreenTimeMs)
+    {
+        System::Delay(
+            System::Milliseconds(
+                MinimumBootScreenTimeMs - elapsed));
     }
 
     m_menuManager.SetMenu(&m_mainMenu);

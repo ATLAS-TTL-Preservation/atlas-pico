@@ -33,6 +33,7 @@ add_executable(atlas-pico
     src/input/InputManager.cpp
     src/cores/atlas/menu/SettingsMenu.cpp
     src/cores/atlas/menu/AboutMenu.cpp
+    src/app/BootScreen.cpp
 )
 
 target_include_directories(atlas-pico

@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <string_view>
 
+#include <atlas/graphics/Image.hpp>
+
 namespace atlas::display
 {
 
@@ -41,6 +43,22 @@ public:
         std::uint16_t y,
         std::string_view text
     ) = 0;
+
+    /// Draws an image at the specified position.
+    virtual void DrawImage(
+        std::uint16_t x,
+        std::uint16_t y,
+        const atlas::graphics::Image& image
+    ) = 0;
+
+    virtual void DrawImageRegion(
+        std::uint16_t dstX,
+        std::uint16_t dstY,
+        const atlas::graphics::Image& image,
+        std::uint16_t srcX,
+        std::uint16_t srcY,
+        std::uint16_t width,
+        std::uint16_t height) = 0;
 
     /// Returns the display width in pixels.
     [[nodiscard]]

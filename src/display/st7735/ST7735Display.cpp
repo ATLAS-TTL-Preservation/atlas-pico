@@ -317,6 +317,104 @@ void ST7735Display::DrawText(
     }
 }
 
+void ST7735Display::DrawImage(
+    std::uint16_t x,
+    std::uint16_t y,
+    const atlas::graphics::Image& image)
+{
+    if (x >= m_width || y >= m_height)
+        return;
+
+    SetAddressWindow(
+        x,
+        y,
+        x + image.GetWidth() - 1,
+        y + image.GetHeight() - 1);
+
+    gpio_put(Pinout::Display::Dc, true);
+    gpio_put(Pinout::Display::Cs, false);
+
+    const auto* data = image.GetData();
+    const auto count = image.GetWidth() * image.GetHeight();
+
+    for (std::size_t i = 0; i < count; ++i)
+    {
+        std::uint16_t pixel = data[i];
+
+        std::uint8_t bytes[2] =
+        {
+            static_cast<std::uint8_t>(pixel >> 8),
+            static_cast<std::uint8_t>(pixel & 0xFF)
+        };
+
+        spi_write_blocking(spi1, bytes, 2);
+    }
+
+    gpio_put(Pinout::Display::Cs, true);
+}
+
+void ST7735Display::DrawImageRegion(
+    std::uint16_t dstX,
+    std::uint16_t dstY,
+    const atlas::graphics::Image& image,
+    std::uint16_t srcX,
+    std::uint16_t srcY,
+    std::uint16_t width,
+    std::uint16_t height)
+{
+    if (srcX >= image.GetWidth() ||
+        srcY >= image.GetHeight())
+    {
+        return;
+    }
+
+    if ((srcX + width) > image.GetWidth() ||
+        (srcY + height) > image.GetHeight())
+    {
+        return;
+    }
+
+    if ((dstX + width) > m_width ||
+        (dstY + height) > m_height)
+    {
+        return;
+    }
+
+    SetAddressWindow(
+        dstX,
+        dstY,
+        dstX + width - 1,
+        dstY + height - 1);
+
+    gpio_put(Pinout::Display::Dc, true);
+    gpio_put(Pinout::Display::Cs, false);
+
+    const auto* imageData = image.GetData();
+
+    for (std::uint16_t row = 0; row < height; ++row)
+    {
+        const auto* rowData =
+            imageData +
+            (srcY + row) * image.GetWidth() +
+            srcX;
+
+        for (std::uint16_t col = 0; col < width; ++col)
+        {
+            std::uint16_t pixel = rowData[col];
+
+            std::uint8_t bytes[2] =
+            {
+                static_cast<std::uint8_t>(pixel >> 8),
+                static_cast<std::uint8_t>(pixel)
+            };
+
+            spi_write_blocking(spi1, bytes, 2);
+        }
+    }
+
+    gpio_put(Pinout::Display::Cs, true);
+}
+
 std::uint16_t ST7735Display::GetWidth() const
 {
     return m_width;

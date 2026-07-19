@@ -2,6 +2,7 @@
 #include <atlas/system/System.hpp>
 
 #include <atlas/hardware/LedPattern.hpp>
+#include <atlas/assets/AtlasSplash.hpp>
 
 using namespace std::chrono_literals;
 using atlas::system::System;
@@ -44,7 +45,6 @@ void Application::Initialize()
     }
 
     m_menuManager.SetMenu(&m_mainMenu);
-
 }
 
 void Application::Loop()

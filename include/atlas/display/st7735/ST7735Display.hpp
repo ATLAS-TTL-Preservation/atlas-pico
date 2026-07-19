@@ -41,6 +41,21 @@ public:
         std::string_view text
     ) override;
 
+    void DrawImage(
+        std::uint16_t x,
+        std::uint16_t y,
+        const atlas::graphics::Image& image
+    ) override;
+
+    void DrawImageRegion(
+        std::uint16_t dstX,
+        std::uint16_t dstY,
+        const atlas::graphics::Image& image,
+        std::uint16_t srcX,
+        std::uint16_t srcY,
+        std::uint16_t width,
+        std::uint16_t height) override;
+
     [[nodiscard]]
     std::uint16_t GetWidth() const override;
 

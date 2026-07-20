@@ -79,11 +79,15 @@ void Application::Initialize()
 
 void Application::Loop()
 {   
+    m_usb.Update();
+
     m_input.Update(m_buttons);
     m_coreManager.Update(m_input.GetInput());
 
     m_coreManager.Draw(m_display);
     m_led.Update(); 
+
+    m_usb.Update();
 }
 
 }

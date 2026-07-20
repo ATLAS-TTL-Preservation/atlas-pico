@@ -13,6 +13,8 @@
 #include <atlas/cores/atlas/AtlasCore.hpp>
 #include <atlas/cores/kaos/KaosCore.hpp>
 
+#include <atlas/usb/UsbManager.hpp>
+
 namespace atlas::app
 {
 
@@ -40,6 +42,8 @@ private:
     atlas::cores::KaosCore m_kaosCore;
 
     atlas::input::InputManager m_input;
+
+    atlas::usb::UsbManager m_usb;
 };
 
 }

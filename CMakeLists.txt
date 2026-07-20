@@ -39,9 +39,9 @@ add_executable(atlas-pico
     src/cores/atlas/AtlasCore.cpp
     src/cores/kaos/menus/MainMenu.cpp
     src/cores/kaos/KaosCore.cpp
-    src/usb/usb_callbacks.cpp
-
-    
+    src/usb/UsbManager.cpp
+    src/usb/UsbCallbacks.cpp
+    src/usb/UsbDescriptors.cpp
 )
 
 target_include_directories(atlas-pico
@@ -55,6 +55,7 @@ target_link_libraries(atlas-pico
     pico_stdlib
     hardware_spi
     tinyusb_device
+    tinyusb_board
 )
 
 pico_add_extra_outputs(atlas-pico)

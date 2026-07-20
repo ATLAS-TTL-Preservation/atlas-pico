@@ -12,9 +12,14 @@ KaosCore::KaosCore(
 
 void KaosCore::Enter()
 {
-    m_mainMenu.SetContext(&m_context);
+    m_context.GetUsbManager().SetProfile(&m_trapTeamPortal);
 
-    m_menuManager.SetMenu(&m_mainMenu);
+    if(m_context.GetUsbManager().Initialize()){
+        m_mainMenu.SetContext(&m_context);
+
+        m_menuManager.SetMenu(&m_mainMenu);
+    }
+
 }
 
 void KaosCore::Exit()

@@ -12,7 +12,7 @@ namespace atlas::app
 {
 
 Application::Application()
-    : m_coreContext(m_coreManager)
+    : m_coreContext(m_coreManager, m_usb)
     , m_atlasCore(m_coreContext), m_kaosCore(m_coreContext)
 {
 }

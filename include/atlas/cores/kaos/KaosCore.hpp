@@ -6,6 +6,8 @@
 #include <atlas/menu/MenuManager.hpp>
 
 #include <atlas/cores/kaos/menus/MainMenu.hpp>
+#include <atlas/cores/kaos/usb/TrapTeamPortal.hpp>
+
 
 namespace atlas::cores
 {
@@ -35,6 +37,8 @@ private:
     atlas::menu::MenuManager m_menuManager;
 
     atlas::cores::kaos::menus::MainMenu m_mainMenu;
+
+    atlas::cores::kaos::usb::TrapTeamPortal m_trapTeamPortal;
 };
 
 }

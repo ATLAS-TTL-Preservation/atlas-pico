@@ -1,5 +1,7 @@
 #include <tusb.h>
 
+#include <atlas/usb/UsbManager.hpp>
+
 extern "C"
 {
 
@@ -13,7 +15,7 @@ void tud_umount_cb()
 
 void tud_suspend_cb(bool remoteWakeupEnabled)
 {
-    (void) remoteWakeupEnabled;
+    (void)remoteWakeupEnabled;
 }
 
 void tud_resume_cb()
@@ -27,13 +29,19 @@ uint16_t tud_hid_get_report_cb(
     uint8_t* buffer,
     uint16_t requestLength)
 {
-    (void)instance;
-    (void)reportId;
-    (void)reportType;
-    (void)buffer;
-    (void)requestLength;
+    auto* profile = atlas::usb::UsbManager::Get()->GetProfile();
 
-    return 0;
+    if (profile == nullptr)
+    {
+        return 0;
+    }
+
+    return profile->OnGetReport(
+        instance,
+        reportId,
+        reportType,
+        buffer,
+        requestLength);
 }
 
 void tud_hid_set_report_cb(
@@ -43,11 +51,19 @@ void tud_hid_set_report_cb(
     uint8_t const* buffer,
     uint16_t bufferSize)
 {
-    (void)instance;
-    (void)reportId;
-    (void)reportType;
-    (void)buffer;
-    (void)bufferSize;
+    auto* profile = atlas::usb::UsbManager::Get()->GetProfile();
+
+    if (profile == nullptr)
+    {
+        return;
+    }
+
+    profile->OnSetReport(
+        instance,
+        reportId,
+        reportType,
+        buffer,
+        bufferSize);
 }
 
 void tud_hid_report_complete_cb(

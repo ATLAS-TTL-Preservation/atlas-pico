@@ -1,5 +1,7 @@
 #pragma once
 
+#include <atlas/usb/UsbManager.hpp>
+
 namespace atlas::core
 {
 
@@ -23,13 +25,15 @@ class CoreContext
 public:
 
     explicit CoreContext(
-        CoreManager& coreManager);
+        CoreManager& coreManager, atlas::usb::UsbManager& usbManager);
 
     CoreManager& GetCoreManager();
 
     atlas::cores::AtlasCore& GetAtlasCore();
 
     atlas::cores::KaosCore& GetKaosCore();
+
+    atlas::usb::UsbManager& GetUsbManager();
 
     void SetAtlasCore(
         atlas::cores::AtlasCore& atlasCore);
@@ -40,9 +44,11 @@ public:
 private:
 
     CoreManager& m_coreManager;
+    atlas::usb::UsbManager& m_usb;
 
     atlas::cores::AtlasCore* m_atlasCore = nullptr;
     atlas::cores::KaosCore* m_kaosCore = nullptr;
+   
 };
 
 }

@@ -5,18 +5,24 @@
 #include <atlas/cores/atlas/AtlasCore.hpp>
 #include <atlas/cores/kaos/KaosCore.hpp>
 
+
 namespace atlas::core
 {
 
 CoreContext::CoreContext(
-    CoreManager& coreManager)
-    : m_coreManager(coreManager)
+    CoreManager& coreManager, atlas::usb::UsbManager& usbManager)
+    : m_coreManager(coreManager), m_usb(usbManager)
 {
 }
 
 CoreManager& CoreContext::GetCoreManager()
 {
     return m_coreManager;
+}
+
+atlas::usb::UsbManager& CoreContext::GetUsbManager()
+{
+    return m_usb;
 }
 
 atlas::cores::AtlasCore& CoreContext::GetAtlasCore()

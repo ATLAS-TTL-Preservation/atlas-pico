@@ -42,6 +42,9 @@ add_executable(atlas-pico
     src/usb/UsbManager.cpp
     src/usb/UsbCallbacks.cpp
     src/usb/UsbDescriptors.cpp
+    src/cores/kaos/usb/SkylandersPortalHid.cpp
+    src/usb/UsbHidProfile.cpp
+    src/cores/kaos/usb/TrapTeamPortal.cpp
 )
 
 target_include_directories(atlas-pico

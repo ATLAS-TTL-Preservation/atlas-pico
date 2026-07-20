@@ -6,10 +6,23 @@
 namespace atlas::usb
 {
 
-void UsbManager::Initialize()
+UsbManager* UsbManager::s_instance = nullptr;
+
+UsbManager* UsbManager::Get()
+{
+    return s_instance;
+}
+
+UsbManager::UsbManager()
+{
+    s_instance = this;
+}
+
+
+bool UsbManager::Initialize()
 {
     board_init();
-    tusb_init();
+    return tusb_rhport_init(RootHubPort, nullptr);
 }
 
 void UsbManager::Update()
@@ -20,6 +33,16 @@ void UsbManager::Update()
     }
 
     tud_task();
+}
+
+void UsbManager::SetProfile(UsbHidProfile* profile)
+{
+    m_profile = profile;
+}
+
+UsbHidProfile* UsbManager::GetProfile() const
+{
+    return m_profile;
 }
 
 }

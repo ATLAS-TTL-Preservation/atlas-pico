@@ -2,6 +2,7 @@
 
 #include <hardware/timer.h>
 #include <pico/stdlib.h>
+#include <hardware/watchdog.h>
 
 namespace atlas::system
 {
@@ -29,6 +30,15 @@ std::uint64_t System::Micros()
 void System::Yield()
 {
     tight_loop_contents();
+}
+
+void System::Reboot(){
+    watchdog_reboot(0, 0, 0);
+
+    while (true)
+    {
+        Yield();
+    }
 }
 
 }

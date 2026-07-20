@@ -1,4 +1,5 @@
 #include <atlas/cores/kaos/KaosCore.hpp>
+#include <atlas/system/System.hpp>
 
 namespace atlas::cores
 {
@@ -18,6 +19,7 @@ void KaosCore::Enter()
 
 void KaosCore::Exit()
 {
+    atlas::system::System::Reboot();
 }
 
 void KaosCore::Update(

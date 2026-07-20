@@ -19,6 +19,8 @@ public:
 
     static void Yield();
 
+    static void Reboot();
+
     [[nodiscard]]
     static std::uint32_t Millis();
 
